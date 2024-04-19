@@ -13,12 +13,3 @@ public interface SistemaStreaming {
     public void alterarCartao(String cartaoNovo) throws UsuarioInexistenteException, CartaoInvalidoException;
 
 }
-
-/*
- * UsuarioExisteException
- * CpfExistenteException
- * MenorDeIdadeException
- * CpfInvalidoException
- * CartaoInvalidoException
- * UsuarioInexistenteException
- */
