@@ -73,5 +73,10 @@ public class UsuarioStreaming {
         return this.plano;
     
     }
+    
+    public String toString(){
 
+        return String.format("UsuarioStreaming[usuario=\"%s\", idade=%s, cpf=\"%s\", plano=\"%s\"]", this.usuario, this.idade, this.cpf, this.plano);
+        
+    }
 }
