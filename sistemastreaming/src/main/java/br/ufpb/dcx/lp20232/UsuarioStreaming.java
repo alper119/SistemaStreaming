@@ -20,6 +20,12 @@ public class UsuarioStreaming {
 
     }
 
+    public UsuarioStreaming(String usuario, int idade, String cpf){
+
+        this(usuario, "", idade, cpf, "", "");
+
+    }
+
     public void setSenha(String novaSenha){
 
         this.senha = novaSenha;
