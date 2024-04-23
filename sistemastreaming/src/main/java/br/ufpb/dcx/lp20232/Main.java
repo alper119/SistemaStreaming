@@ -17,7 +17,7 @@ public class Main {
          * 7 - Buscar usuario por CPF
          * 0 - Sair
          */
-
+        System.out.println("");
         int opcao = 9;
 
         while (opcao > 0) {
