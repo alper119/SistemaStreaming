@@ -1,82 +1,77 @@
 package br.ufpb.dcx.lp20232;
 
-// import java.io.IOException;
-// import java.util.ArrayList;
-
 import javax.swing.JOptionPane;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        String cpf = "";
+        /*
+         * Menu
+         * 1 - Adicionar usuario
+         * 2 - Remover usuario
+         * 3 - Alterar senha do usuario
+         * 4 - Alterar plano do usuario
+         * 5 - Alterar cartao do usuario
+         * 6 - Buscar usuario por nome
+         * 7 - Buscar usuario por CPF
+         * 0 - Sair
+         */
 
-        while (cpf != "fim") {
+        int opcao = 9;
 
-            cpf = JOptionPane.showInputDialog("CPF:");
+        while (opcao > 0) {
 
-            if(cpf.equalsIgnoreCase("fim")){
+            try {
 
-                break;
+                opcao = Integer.parseInt(JOptionPane.showInputDialog("Sistema de Gerenciamento de Contas de Streaming\nDigite o número da opção e pressione ENTER:\n1 - Adicionar usuario\n2 - Remover usuario\n3 - Alterar senha do usuario\n4 - Alterar plano do usuario\n5 - Alterar cartao do usuario\n6 - Buscar usuario por nome\n7 - Buscar usuario por CPF\n0 - Sair"));
+            
+            } catch(NumberFormatException e){
+
+                opcao = 9;
 
             }
-            // System.out.println(validadorCpf(cpf) ? "Válido":"Inválido");
+
+            switch (opcao) {
+                case 1:
+                    
+                    break;
+
+                case 2:
+                    
+                    break;
+
+                case 3:
+                    
+                    break;
+
+                case 4:
+                    
+                    break;
+
+                case 5:
+                    
+                    break;
+
+                case 6:
+                    
+                    break;
+
+                case 7:
+                    
+                    break;
+
+                case 0:
+                    
+                    break;
+                
+                default:
+                    break;
+                    
+            }
+
             
         }
-        
-        // BancoDeDados obj_bd = new BancoDeDados("./bd.txt");
-
-        // ArrayList<UsuarioStreaming> listaUsuarios = null;
-
-        // try {
-
-        //     listaUsuarios = obj_bd.carregaListaUsuarios();
-
-        //     for(UsuarioStreaming u: listaUsuarios){
-
-        //         System.out.println(u.toString());
-
-        //     }
-        
-        // } catch(IOException e){
-
-        //     System.err.println(e.getMessage());
-
-        // } finally {
-
-        //     System.out.println("final exec");
-        // }
-
-        // int loops = Integer.parseInt(JOptionPane.showInputDialog("Quantos cadastros?"));
-        
-        // ArrayList<UsuarioStreaming> listaUsuarios = new ArrayList<>();
-
-        // for(int i = 0; i < loops; i++){
-
-        //     String user = JOptionPane.showInputDialog("Nome do usuário:");
-        //     String pass = JOptionPane.showInputDialog("Senha:");
-        //     int age = Integer.parseInt(JOptionPane.showInputDialog("Idade:"));
-        //     String cpf = JOptionPane.showInputDialog("CPF:");
-        //     String card = JOptionPane.showInputDialog("Cartão de Crédito:");
-        //     String plan = JOptionPane.showInputDialog("Plano:");
-
-        //     listaUsuarios.add(new UsuarioStreaming(user, pass, age, cpf, card, plan));
-
-
-        // }
-
-        // try{
-
-        //     obj_bd.salvaListaUsuarios(listaUsuarios);
-
-        // } catch (IOException e){
-
-        //     System.err.println(e.getMessage() + "\nMain.java");
-
-        // }
-        
-
-
 
     }
 }

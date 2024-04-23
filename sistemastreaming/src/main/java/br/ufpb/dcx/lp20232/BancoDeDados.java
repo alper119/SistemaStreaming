@@ -23,25 +23,37 @@ public class BancoDeDados {
 
         ArrayList<UsuarioStreaming> listaUsuarios = new ArrayList<>();
 
-        BufferedReader leitor = new BufferedReader(new FileReader(this.path));
+        BufferedReader leitor = null;
 
         String linha = null;
 
-        do {
+        try {
 
-            linha = leitor.readLine();
+            leitor = new BufferedReader(new FileReader(this.path));
 
-            if(linha != null){
+            do {
 
-                String[] partes = linha.split(this.SEPARADOR_DADOS);
+                linha = leitor.readLine();
 
-                listaUsuarios.add(new UsuarioStreaming(partes[0], partes[1], Integer.parseInt(partes[2]), partes[3], partes[4], partes[5]));
+                if(linha != null){
+
+                    String[] partes = linha.split(this.SEPARADOR_DADOS);
+
+                    listaUsuarios.add(new UsuarioStreaming(partes[0], partes[1], Integer.parseInt(partes[2]), partes[3], partes[4], partes[5]));
+
+                }
+
+            } while(linha != null);
+
+        } finally {
+
+            if(leitor != null){
+
+                leitor.close();
 
             }
 
-        } while(linha != null);
-
-        leitor.close();
+        }
 
         return listaUsuarios;
 
@@ -49,11 +61,11 @@ public class BancoDeDados {
 
     public void salvaListaUsuarios(ArrayList<UsuarioStreaming> listaUsuarios) throws IOException{
 
-        // BufferedWriter escritor = null;
+        BufferedWriter escritor = null;
 
-        // try{
+        try{
 
-            BufferedWriter escritor = new BufferedWriter(new FileWriter(this.path));
+            escritor = new BufferedWriter(new FileWriter(this.path));
 
             for(UsuarioStreaming u: listaUsuarios){
 
@@ -61,15 +73,15 @@ public class BancoDeDados {
 
             } 
 
-        // } finally {
+        } finally {
 
-            // if(escritor != null){
+            if(escritor != null){
 
                 escritor.close();
 
-            // }
+            }
 
-        // }
+        }
 
     }
 }

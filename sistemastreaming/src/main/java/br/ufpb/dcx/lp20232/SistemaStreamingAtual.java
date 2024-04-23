@@ -83,7 +83,59 @@ public class SistemaStreamingAtual implements SistemaStreaming {
 
     private boolean validadorCartao(String cartao){
 
-        return cartao.length() > 5;
+        boolean cartaoValido = false;
+
+        if(cartao.length() == 16){
+
+            int somaVerificacaoInformada = Character.getNumericValue(cartao.charAt(15));
+
+            String parteAnalisada = cartao.substring(0, 15);
+
+            boolean dobrarValor = true;
+
+            int digitoAtual = 0;
+            int dobroAtual = 0;
+
+            int acumuladorDobro = 0;
+            int acumuladorImpares = 0;
+
+            for(int i = 14; i >= 0; i--){
+
+                digitoAtual = Character.getNumericValue(parteAnalisada.charAt(i));
+
+                if(dobrarValor){
+
+                    dobroAtual = digitoAtual*2;
+
+                    if(dobroAtual > 9){
+
+                        int dezenas = dobroAtual%10;
+                        int unidades = dobroAtual/10;
+
+                        dobroAtual = dezenas + unidades;
+
+                    }
+
+                    acumuladorDobro += dobroAtual;
+
+                    
+
+                } else {
+
+                    acumuladorImpares += digitoAtual;
+
+                }
+
+                dobrarValor = !dobrarValor; 
+
+            }
+
+            int somaVerificacaoCalculada = 10 - ((acumuladorDobro + acumuladorImpares)%10);
+
+            cartaoValido = somaVerificacaoCalculada == somaVerificacaoInformada;
+        }
+
+        return cartaoValido;
         
     }
 
@@ -148,28 +200,129 @@ public class SistemaStreamingAtual implements SistemaStreaming {
 
     @Override
     public void removerUsuario(String usuario) throws UsuarioInexistenteException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removerUsuario'");
+
+        for(UsuarioStreaming u: this.listaUsuarios){
+
+            if(u.getUsuario().equalsIgnoreCase(usuario)){
+
+                this.listaUsuarios.remove(u);
+                break;
+
+            }
+
+        }
+
+        throw new UsuarioInexistenteException(usuario);
+
     }
 
     @Override
-    public void alterarSenhaDoUsuario(String usuario, String senhaAntiga, String senhaNova)
-            throws UsuarioInexistenteException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'alterarSenhaDoUsuario'");
+    public void alterarSenhaDoUsuario(String usuario, String senhaAntiga, String senhaNova) throws UsuarioInexistenteException, SenhaIncorretaException {
+
+        for(UsuarioStreaming u: this.listaUsuarios){
+
+            if(u.getUsuario().equalsIgnoreCase(usuario)){
+
+                if(u.getSenha().equals(senhaAntiga)){
+
+                    u.setSenha(senhaNova);
+                    break;
+
+                } else {
+
+                    throw new SenhaIncorretaException(usuario);
+
+                }                
+
+            }
+
+        }
+        
+        throw new UsuarioInexistenteException(usuario);
+
     }
 
     @Override
     public void alterarPlano(String usuario, String planoNovo) throws UsuarioInexistenteException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'alterarPlano'");
+
+        for(UsuarioStreaming u: this.listaUsuarios){
+
+            if(u.getUsuario().equalsIgnoreCase(usuario)){
+
+                u.setPlano(planoNovo);
+                break;
+
+            }
+
+        }
+        
+        throw new UsuarioInexistenteException(usuario);
+
     }
 
     @Override
-    public void alterarCartao(String usuario, String cartaoNovo)
-            throws UsuarioInexistenteException, CartaoInvalidoException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'alterarCartao'");
+    public void alterarCartao(String usuario, String cartaoNovo) throws UsuarioInexistenteException, CartaoInvalidoException {
+
+        for(UsuarioStreaming u: this.listaUsuarios){
+
+            if(u.getUsuario().equalsIgnoreCase(usuario)){
+
+                if(this.validadorCartao(cartaoNovo)){
+
+                    u.setCartao(cartaoNovo);
+                    break;
+
+                } else {
+
+                    throw new CartaoInvalidoException(cartaoNovo);
+
+                }
+
+            }
+        
+        }
+
+        throw new UsuarioInexistenteException(usuario);
+
+    }
+    
+    public UsuarioStreaming buscarUsuarioPorNome(String usuario) throws UsuarioInexistenteException {
+
+        for(UsuarioStreaming u: this.listaUsuarios){
+
+            if(u.getUsuario().equalsIgnoreCase(usuario)){
+
+                return u;
+
+            }
+        }
+
+        throw new UsuarioInexistenteException(usuario);
+
+    }
+
+    public UsuarioStreaming buscarUsuarioPorCpf(String cpf) throws UsuarioInexistenteException, CpfInvalidoException {
+
+        if(this.validadorCpf(cpf)){
+
+            for(UsuarioStreaming u: this.listaUsuarios){
+
+                if(u.getCpf().equalsIgnoreCase(cpf)){
+
+                    return u;
+
+                }
+
+            }
+
+            throw new UsuarioInexistenteException(cpf);
+
+        } else {
+
+            throw new CpfInvalidoException(cpf);
+
+        }
+
     }
     
 }

@@ -6,7 +6,7 @@ public interface SistemaStreaming {
 
     public void removerUsuario(String usuario) throws UsuarioInexistenteException;
 
-    public void alterarSenhaDoUsuario(String usuario, String senhaAntiga, String senhaNova) throws UsuarioInexistenteException;
+    public void alterarSenhaDoUsuario(String usuario, String senhaAntiga, String senhaNova) throws UsuarioInexistenteException, SenhaIncorretaException;
 
     public void alterarPlano(String usuario, String planoNovo) throws UsuarioInexistenteException;
 
