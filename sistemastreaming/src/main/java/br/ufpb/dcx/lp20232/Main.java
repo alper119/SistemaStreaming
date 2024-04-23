@@ -24,15 +24,17 @@ public class Main {
 
             try {
 
-                opcao = Integer.parseInt(JOptionPane.showInputDialog("Sistema de Gerenciamento de Contas de Streaming\nDigite o número da opção e pressione ENTER:\n1 - Adicionar usuario\n2 - Remover usuario\n3 - Alterar senha do usuario\n4 - Alterar plano do usuario\n5 - Alterar cartao do usuario\n6 - Buscar usuario por nome\n7 - Buscar usuario por CPF\n0 - Sair"));
+                opcao = Integer.parseInt(JOptionPane.showInputDialog("Sistema de Gerenciamento de Contas de Streaming\n\nDigite o número da opção e pressione ENTER:\n1 - Adicionar usuario\n2 - Remover usuário\n3 - Alterar senha do usuário\n4 - Alterar plano do usuário\n5 - Alterar cartão de crédito do usuário\n6 - Buscar usuário por nome\n7 - Buscar usuário por CPF\n0 - Sair"));
             
             } catch(NumberFormatException e){
 
                 opcao = 9;
+                System.out.println(e.getMessage());
 
             }
 
             switch (opcao) {
+
                 case 1:
                     
                     break;
@@ -62,12 +64,13 @@ public class Main {
                     break;
 
                 case 0:
-                    
+
                     break;
                 
                 default:
+                    JOptionPane.showMessageDialog(null, "Opção Inválida");
                     break;
-                    
+
             }
 
             
