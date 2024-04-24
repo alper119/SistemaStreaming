@@ -3,6 +3,8 @@ package br.ufpb.dcx.lp20232;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 public class SistemaStreamingAtual implements SistemaStreaming {
 
     private BancoDeDados objeto_bancoDeDados;
@@ -155,6 +157,20 @@ public class SistemaStreamingAtual implements SistemaStreaming {
 
     }
 
+    private void salvarBancoDeDados(){
+
+        try {
+
+            this.objeto_bancoDeDados.salvaListaUsuarios(this.listaUsuarios);
+
+        } catch (IOException e) {
+
+            JOptionPane.showMessageDialog(null, "Não foi possível salvar o arquivo do banco de dados", "Erro no banco de dados", JOptionPane.ERROR_MESSAGE);
+
+        }
+
+    }
+
     @Override
     public void cadastrarUsuario(String usuario, String senha, int idade, String cpf, String cartao, String plano) throws UsuarioExisteException, CartaoInvalidoException, CpfExistenteException, CpfInvalidoException, MenorDeIdadeException {
         
@@ -195,6 +211,7 @@ public class SistemaStreamingAtual implements SistemaStreaming {
         }
 
         listaUsuarios.add(new UsuarioStreaming(usuario, senha, idade, cpf, cartao, plano));
+        this.salvarBancoDeDados();
 
     }
 
@@ -206,6 +223,7 @@ public class SistemaStreamingAtual implements SistemaStreaming {
             if(u.getUsuario().equalsIgnoreCase(usuario)){
 
                 this.listaUsuarios.remove(u);
+                this.salvarBancoDeDados();
                 break;
 
             }
@@ -226,6 +244,7 @@ public class SistemaStreamingAtual implements SistemaStreaming {
                 if(u.getSenha().equals(senhaAntiga)){
 
                     u.setSenha(senhaNova);
+                    this.salvarBancoDeDados();
                     break;
 
                 } else {
@@ -250,6 +269,7 @@ public class SistemaStreamingAtual implements SistemaStreaming {
             if(u.getUsuario().equalsIgnoreCase(usuario)){
 
                 u.setPlano(planoNovo);
+                this.salvarBancoDeDados();
                 break;
 
             }
@@ -270,6 +290,7 @@ public class SistemaStreamingAtual implements SistemaStreaming {
                 if(this.validadorCartao(cartaoNovo)){
 
                     u.setCartao(cartaoNovo);
+                    this.salvarBancoDeDados();
                     break;
 
                 } else {
