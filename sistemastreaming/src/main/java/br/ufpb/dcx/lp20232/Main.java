@@ -44,7 +44,7 @@ public class Main {
                             int idade = Integer.parseInt(JOptionPane.showInputDialog("Digite a idade:"));
                             String cpf = JOptionPane.showInputDialog("Digite um CPF válido:");
                             String cartao = JOptionPane.showInputDialog("Digite um cartão válido");
-                            String plano = JOptionPane.showInputDialog("Qual o plano excolhido ---> (Básico com anúncios, básico e premium)");
+                            String plano = JOptionPane.showInputDialog("Qual o plano escolhido ---> (Básico com anúncios, básico e premium)");
                             sistema.cadastrarUsuario(usuario, senha, idade, cpf, cartao, plano);
                             continuar = false;
 
@@ -74,6 +74,17 @@ public class Main {
                     break;
 
                 case 2:
+                    boolean cont = true;
+                    while(cont){
+                        try{
+                            String user = JOptionPane.showInputDialog("Digite o usuário a ser removido:");
+                            sistema.removerUsuario(user);
+                            cont = false;
+                        } catch(UsuarioInexistenteException e){
+                            JOptionPane.showMessageDialog(null,"O usuário não existe no sistema!");
+                            cont = true;
+                        }
+                    }
                     
                     break;
 
