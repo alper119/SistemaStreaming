@@ -224,7 +224,7 @@ public class SistemaStreamingAtual implements SistemaStreaming {
 
                 this.listaUsuarios.remove(u);
                 this.salvarBancoDeDados();
-                break;
+                return;
 
             }
 
