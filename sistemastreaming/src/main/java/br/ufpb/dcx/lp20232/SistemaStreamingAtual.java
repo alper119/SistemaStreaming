@@ -9,7 +9,7 @@ public class SistemaStreamingAtual implements SistemaStreaming {
 
     private BancoDeDados objeto_bancoDeDados;
     private ArrayList<UsuarioStreaming> listaUsuarios;
-    public static final String[] PLANOS = {"básico com anúncios", "básico", "premium"};
+    public final String[] PLANOS = {"Básico com anúncios", "Básico", "Premium"};
 
     public SistemaStreamingAtual(String pathBancoDeDados){
 
@@ -84,7 +84,7 @@ public class SistemaStreamingAtual implements SistemaStreaming {
     }
 
     private boolean validadorCartao(String cartao){
-
+        
         boolean cartaoValido = false;
 
         if(cartao.length() == 16){
