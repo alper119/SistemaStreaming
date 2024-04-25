@@ -17,7 +17,7 @@ public class Main {
          * 7 - Buscar usuario por CPF
          * 0 - Sair
          */
-        System.out.println("");
+        SistemaStreamingAtual sistema = new SistemaStreamingAtual("./bd.txt");
         int opcao = 9;
 
         while (opcao > 0) {
@@ -36,6 +36,40 @@ public class Main {
             switch (opcao) {
 
                 case 1:
+                    boolean continuar = true;
+                    while(continuar){
+                        try{
+                            String usuario = JOptionPane.showInputDialog("Digite o usuário"); 
+                            String senha = JOptionPane.showInputDialog("Digite a senha");
+                            int idade = Integer.parseInt(JOptionPane.showInputDialog("Digite a idade:"));
+                            String cpf = JOptionPane.showInputDialog("Digite um CPF válido:");
+                            String cartao = JOptionPane.showInputDialog("Digite um cartão válido");
+                            String plano = JOptionPane.showInputDialog("Qual o plano excolhido ---> (Básico com anúncios, básico e premium)");
+                            sistema.cadastrarUsuario(usuario, senha, idade, cpf, cartao, plano);
+                            continuar = false;
+
+                        } catch(UsuarioExisteException e){
+                            JOptionPane.showMessageDialog(null,"O usuário já existe em nosso sistema");
+                            continuar = true;
+                        } catch(MenorDeIdadeException e){
+                            JOptionPane.showMessageDialog(null,"O usuário é menor de idade!");
+                            continuar = true;
+                        } catch(CartaoInvalidoException e){
+                            JOptionPane.showMessageDialog(null,"O cartão digitado é invalido");
+                            continuar = true;
+                        } catch(CpfExistenteException e){
+                            JOptionPane.showMessageDialog(null,"O CPF já existe em nosso sistema");
+                            continuar = true;
+                        } catch(CpfInvalidoException e){
+                            JOptionPane.showMessageDialog(null,"O CPF digitado é invalido!");
+                            continuar = true;
+                        } catch(NumberFormatException e){
+                            JOptionPane.showMessageDialog(null, "Digite uma idade válida");
+                            continuar = true;
+                        }
+
+                        
+                    }
                     
                     break;
 
