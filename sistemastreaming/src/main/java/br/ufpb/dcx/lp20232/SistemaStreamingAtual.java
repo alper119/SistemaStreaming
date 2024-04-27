@@ -2,6 +2,7 @@ package br.ufpb.dcx.lp20232;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 
@@ -344,6 +345,40 @@ public class SistemaStreamingAtual implements SistemaStreaming {
 
         }
 
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((objeto_bancoDeDados == null) ? 0 : objeto_bancoDeDados.hashCode());
+        result = prime * result + ((listaUsuarios == null) ? 0 : listaUsuarios.hashCode());
+        result = prime * result + Arrays.hashCode(PLANOS);
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        SistemaStreamingAtual other = (SistemaStreamingAtual) obj;
+        if (objeto_bancoDeDados == null) {
+            if (other.objeto_bancoDeDados != null)
+                return false;
+        } else if (!objeto_bancoDeDados.equals(other.objeto_bancoDeDados))
+            return false;
+        if (listaUsuarios == null) {
+            if (other.listaUsuarios != null)
+                return false;
+        } else if (!listaUsuarios.equals(other.listaUsuarios))
+            return false;
+        if (!Arrays.equals(PLANOS, other.PLANOS))
+            return false;
+        return true;
     }
     
 }
