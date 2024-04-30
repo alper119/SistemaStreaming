@@ -94,14 +94,14 @@ public class Main {
                     break;
 
                 case 3:
-                    boolean Conti = true;
+                    boolean conti = true;
                     do{
                         try{
                             String usuario = JOptionPane.showInputDialog("Digite o usuário para mudar a senha:");
                             String senhaAntiga = JOptionPane.showInputDialog("Digite a senha antiga:");
                             String senhaNova = JOptionPane.showInputDialog("Digite a senha:");
                             sistema.alterarSenhaDoUsuario(usuario, senhaAntiga, senhaNova);
-                            Conti = false;
+                            conti = false;
                             JOptionPane.showMessageDialog(null, "Senha alterada com sucesso");
                         } catch(SenhaIncorretaException e){
                             JOptionPane.showMessageDialog(null, "A senha antiga está incorreta");
@@ -109,7 +109,7 @@ public class Main {
                             JOptionPane.showMessageDialog(null, "O usuário não existe");
                         }
 
-                    } while (Conti) ;
+                    } while (conti) ;
                         
                     
             
