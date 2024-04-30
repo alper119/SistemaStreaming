@@ -42,8 +42,8 @@ public class Main {
                             String usuario = JOptionPane.showInputDialog("Digite o usuário"); 
                             String senha = JOptionPane.showInputDialog("Digite a senha");
                             int idade = Integer.parseInt(JOptionPane.showInputDialog("Digite a idade:"));
-                            String cpf = JOptionPane.showInputDialog("Digite um CPF válido:").replaceAll("^[0-9]", "");
-                            String cartao = JOptionPane.showInputDialog("Digite um cartão válido").replaceAll("^[0-9]", "");
+                            String cpf = JOptionPane.showInputDialog("Digite um CPF válido:").replaceAll("[^0-9]", "");
+                            String cartao = JOptionPane.showInputDialog("Digite um cartão válido").replaceAll("[^0-9]", "");
                             String plano = JOptionPane.showInputDialog("Qual o plano escolhido ---> (Básico com anúncios, básico e premium)");
                             sistema.cadastrarUsuario(usuario, senha, idade, cpf, cartao, plano);
                             continuar = false;
@@ -114,6 +114,12 @@ public class Main {
                     break;
 
                 case 4:
+                boolean continuando = true;
+                    do{
+                        try{
+
+                        }
+                    }while(continuando);
                     
                     break;
 
