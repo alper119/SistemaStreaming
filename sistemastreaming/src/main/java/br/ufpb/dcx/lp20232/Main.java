@@ -149,10 +149,34 @@ public class Main {
                     break;
 
                 case 6:
+                boolean going = true;
+                do{
+                    try{
+                        String nome = JOptionPane.showInputDialog("Digite o nome do usuário:");
+                        UsuarioStreaming usuario= sistema.buscarUsuarioPorNome(nome);
+                        usuario.toString();
+                        going = false;
+                    } catch(UsuarioInexistenteException e){
+                        JOptionPane.showMessageDialog(null, "O usuário não existe)");
+                    }
+                }while (going); 
                     
                     break;
 
                 case 7:
+                boolean goes = true;
+                do{
+                    try{
+                    String cpf = JOptionPane.showInputDialog("Digite o CPF a ser pesquisado").replaceAll("[^0-9]", "");
+                      UsuarioStreaming usuario = sistema.buscarUsuarioPorCpf(cpf);
+                      usuario.toString();
+                      goes = false;
+                    }catch(UsuarioInexistenteException e){
+                        JOptionPane.showMessageDialog(null, "O usuário não existe");
+                    }catch(CpfInvalidoException e){
+                        JOptionPane.showMessageDialog(null, "O CPF digitado é invalido!");
+                    }
+                }while(goes);
                     
                     break;
 
