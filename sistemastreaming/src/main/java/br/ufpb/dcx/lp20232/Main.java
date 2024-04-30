@@ -154,7 +154,7 @@ public class Main {
                     try{
                         String nome = JOptionPane.showInputDialog("Digite o nome do usuário:");
                         UsuarioStreaming usuario= sistema.buscarUsuarioPorNome(nome);
-                        usuario.toString();
+                       JOptionPane.showMessageDialog(null, usuario.toString());
                         going = false;
                     } catch(UsuarioInexistenteException e){
                         JOptionPane.showMessageDialog(null, "O usuário não existe)");
@@ -169,7 +169,7 @@ public class Main {
                     try{
                     String cpf = JOptionPane.showInputDialog("Digite o CPF a ser pesquisado").replaceAll("[^0-9]", "");
                       UsuarioStreaming usuario = sistema.buscarUsuarioPorCpf(cpf);
-                      usuario.toString();
+                      JOptionPane.showMessageDialog(null, usuario.toString());
                       goes = false;
                     }catch(UsuarioInexistenteException e){
                         JOptionPane.showMessageDialog(null, "O usuário não existe");
@@ -181,6 +181,7 @@ public class Main {
                     break;
 
                 case 0:
+
 
                     break;
                 
