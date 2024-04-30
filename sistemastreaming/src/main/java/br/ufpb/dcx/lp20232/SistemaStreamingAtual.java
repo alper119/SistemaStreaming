@@ -246,7 +246,7 @@ public class SistemaStreamingAtual implements SistemaStreaming {
 
                     u.setSenha(senhaNova);
                     this.salvarBancoDeDados();
-                    break;
+                    return;
 
                 } else {
 
