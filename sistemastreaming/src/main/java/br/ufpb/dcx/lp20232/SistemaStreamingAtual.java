@@ -271,7 +271,7 @@ public class SistemaStreamingAtual implements SistemaStreaming {
 
                 u.setPlano(planoNovo);
                 this.salvarBancoDeDados();
-                break;
+                return;
 
             }
 
@@ -292,7 +292,7 @@ public class SistemaStreamingAtual implements SistemaStreaming {
 
                     u.setCartao(cartaoNovo);
                     this.salvarBancoDeDados();
-                    break;
+                    return;
 
                 } else {
 
