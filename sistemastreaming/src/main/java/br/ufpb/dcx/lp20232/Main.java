@@ -37,7 +37,7 @@ public class Main {
 
                 case 1:
                     boolean continuar = true;
-                    while(continuar){
+                    do{
                         try{
                             String usuario = JOptionPane.showInputDialog("Digite o usuário"); 
                             String senha = JOptionPane.showInputDialog("Digite a senha");
@@ -50,45 +50,69 @@ public class Main {
 
                         } catch(UsuarioExisteException e){
                             JOptionPane.showMessageDialog(null,"O usuário já existe em nosso sistema");
-                            continuar = true;
+                
                         } catch(MenorDeIdadeException e){
                             JOptionPane.showMessageDialog(null,"O usuário é menor de idade!");
-                            continuar = true;
+                           
                         } catch(CartaoInvalidoException e){
                             JOptionPane.showMessageDialog(null,"O cartão digitado é invalido");
-                            continuar = true;
+                           
                         } catch(CpfExistenteException e){
                             JOptionPane.showMessageDialog(null,"O CPF já existe em nosso sistema");
-                            continuar = true;
+                          
                         } catch(CpfInvalidoException e){
                             JOptionPane.showMessageDialog(null,"O CPF digitado é invalido!");
-                            continuar = true;
+                           
                         } catch(NumberFormatException e){
                             JOptionPane.showMessageDialog(null, "Digite uma idade válida");
-                            continuar = true;
+                            
                         }
 
                         
-                    }
+                    }while (continuar);
+                        
+                    
                     
                     break;
 
                 case 2:
                     boolean cont = true;
-                    while(cont){
+                   do{
                         try{
                             String user = JOptionPane.showInputDialog("Digite o usuário a ser removido:");
                             sistema.removerUsuario(user);
                             cont = false;
+                            JOptionPane.showMessageDialog(null, "Usuário removido com sucesso");;
                         } catch(UsuarioInexistenteException e){
                             JOptionPane.showMessageDialog(null,"O usuário não existe no sistema!");
-                            cont = true;
+                           
                         }
-                    }
+                    } while (cont); 
+                        
+                
                     
                     break;
 
                 case 3:
+                    boolean Conti = true;
+                    do{
+                        try{
+                            String usuario = JOptionPane.showInputDialog("Digite o usuário para mudar a senha:");
+                            String senhaAntiga = JOptionPane.showInputDialog("Digite a senha antiga:");
+                            String senhaNova = JOptionPane.showInputDialog("Digite a senha:");
+                            sistema.alterarSenhaDoUsuario(usuario, senhaAntiga, senhaNova);
+                            Conti = false;
+                            JOptionPane.showMessageDialog(null, "Senha alterada com sucesso");
+                        } catch(SenhaIncorretaException e){
+                            JOptionPane.showMessageDialog(null, "A senha antiga está incorreta");
+                        } catch(UsuarioInexistenteException e){
+                            JOptionPane.showMessageDialog(null, "O usuário não existe");
+                        }
+
+                    } while (Conti) ;
+                        
+                    
+            
                     
                     break;
 
