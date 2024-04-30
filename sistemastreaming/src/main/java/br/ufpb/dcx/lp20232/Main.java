@@ -131,6 +131,20 @@ public class Main {
                     break;
 
                 case 5:
+                boolean go = true;
+                do{
+                    try{
+                        String usuario = JOptionPane.showInputDialog("Digite o usuário para alterar o cartão:");
+                        String cartaoNovo = JOptionPane.showInputDialog("Digite o novo cartão").replaceAll("[^0-9]", "");
+                        sistema.alterarCartao(usuario, cartaoNovo);
+                        go = false;
+                        JOptionPane.showMessageDialog(null, "Cartão alterado com sucesso!");
+                    } catch(UsuarioInexistenteException e){
+                        JOptionPane.showMessageDialog(null, "O usuário não existe");
+                    } catch(CartaoInvalidoException e){
+                        JOptionPane.showMessageDialog(null, "O cartão digitado é invalido!");
+                    }
+                }while(go);
                     
                     break;
 
