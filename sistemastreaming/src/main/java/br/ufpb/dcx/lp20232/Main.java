@@ -117,7 +117,14 @@ public class Main {
                 boolean continuando = true;
                     do{
                         try{
+                            String usuario = JOptionPane.showInputDialog("Digite o usuário a ser alterado o plano:");
+                            String planoNovo = JOptionPane.showInputDialog("Digite o plano escolhido: ---> (Básico com anúncios, básico e premium)");
+                            sistema.alterarPlano(usuario, planoNovo);
+                            continuando = false;
+                            JOptionPane.showMessageDialog(null, "Plano alterado com sucesso!");
 
+                        } catch(UsuarioInexistenteException e){
+                            JOptionPane.showMessageDialog(null, " O usuário não existe");
                         }
                     }while(continuando);
                     
