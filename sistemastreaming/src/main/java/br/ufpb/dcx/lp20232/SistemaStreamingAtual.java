@@ -7,6 +7,7 @@ import java.util.Arrays;
 import javax.swing.JOptionPane;
 
 public class SistemaStreamingAtual implements SistemaStreaming {
+    
 
     private BancoDeDados objeto_bancoDeDados;
     private ArrayList<UsuarioStreaming> listaUsuarios;
