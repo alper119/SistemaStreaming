@@ -1,8 +1,44 @@
 package br.ufpb.dcx.lp20232;
 
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class Main {
+
+    public static String customInput(String tituloJanela, String textoInput, String[] opcoes, int tamanhoInput, int icone){
+
+        JPanel painel = new JPanel();
+        painel.add(new JLabel(textoInput));
+        JTextField campoTexto = new JTextField(tamanhoInput);
+        painel.add(campoTexto);
+
+        int qtdOpcoesRecebidas = opcoes.length;
+        int tipoBotoes = 0;
+
+        switch(qtdOpcoesRecebidas){
+
+            case 1:
+                
+                tipoBotoes = JOptionPane.YES_OPTION;
+                break;
+
+            case 2:
+
+                tipoBotoes = JOptionPane.YES_NO_OPTION;
+                break;
+
+            default:
+
+                tipoBotoes = JOptionPane.YES_NO_OPTION;
+                break;
+
+        }
+        int opJanela = JOptionPane.showOptionDialog(null, painel, tituloJanela, tipoBotoes, icone, null, opcoes, opcoes[0]);
+        return opJanela == JOptionPane.YES_OPTION ? campoTexto.getText():null;
+
+    }
 
     public static void main(String[] args) {
 
@@ -17,6 +53,7 @@ public class Main {
          * 7 - Buscar usuario por CPF
          * 0 - Sair
          */
+
         SistemaStreamingAtual sistema = new SistemaStreamingAtual("./bd.txt");
         int opcao = 9;
 
@@ -36,43 +73,80 @@ public class Main {
             switch (opcao) {
 
                 case 1:
-                    boolean continuar = true;
-                    do{
-                        try{
-                            String usuario = JOptionPane.showInputDialog("Digite o usuário"); 
-                            String senha = JOptionPane.showInputDialog("Digite a senha");
-                            int idade = Integer.parseInt(JOptionPane.showInputDialog("Digite a idade:"));
-                            String cpf = JOptionPane.showInputDialog("Digite um CPF válido:").replaceAll("[^0-9]", "");
-                            String cartao = JOptionPane.showInputDialog("Digite um cartão válido").replaceAll("[^0-9]", "");
-                            String plano = JOptionPane.showInputDialog("Qual o plano escolhido ---> (Básico com anúncios, básico e premium)");
+
+                    boolean loopCadastro = true;
+                    
+                    do {
+
+                        // Coleta dos dados
+                        String tituloJanela = "Cadastro do novo usuário";
+                        String[] botoesCampoUsuario = {"Avançar", "Cancelar"};
+                        String usuario = customInput(tituloJanela, "Digite o usuário:", botoesCampoUsuario, 10, JOptionPane.QUESTION_MESSAGE);
+                        
+                        // Caso o usuário clique na opção "Cancelar", o programa volta pro menu principal
+                        if(usuario == null){ 
+
+                            break;
+
+                        }
+
+                        String[] botoesOutrosCampos = {"Avançar"};
+
+                        String senha = customInput(tituloJanela, "Digite a senha:", botoesOutrosCampos, 10, JOptionPane.QUESTION_MESSAGE);
+
+                        // Não sai do loop enquanto "idade" não for inteiro
+                        int idade = 0;
+
+                        do {
+
+                            try {
+
+                                idade = Integer.parseInt(customInput(tituloJanela, "Digite a idade:", botoesOutrosCampos, 10, JOptionPane.QUESTION_MESSAGE));
+
+                            } catch(NumberFormatException e){
+
+                                JOptionPane.showMessageDialog(null, "Digite uma idade válida", tituloJanela, JOptionPane.ERROR_MESSAGE);
+                            
+                            }
+
+                        } while(idade <= 0);
+
+                        String cpf = customInput(tituloJanela, "Digite um CPF válido:", botoesOutrosCampos, 14, JOptionPane.QUESTION_MESSAGE).replaceAll("[^0-9]", "");
+                        String cartao = customInput(tituloJanela, "Digite um cartão válido", botoesOutrosCampos, 19, JOptionPane.QUESTION_MESSAGE).replaceAll("[^0-9]", "");
+
+                        String plano = sistema.PLANOS[JOptionPane.showOptionDialog(null, "Qual o plano escolhido?", tituloJanela, 0, 3, null, sistema.PLANOS, sistema.PLANOS[0])];
+
+                        // Tenta realizar o cadastro
+                        try {
+
                             sistema.cadastrarUsuario(usuario, senha, idade, cpf, cartao, plano);
-                            continuar = false;
+                            loopCadastro = false; // Se chegou nessa linha, não foi disparada nenhuma exceção; o cadastro foi realizado com sucesso.
+                            JOptionPane.showMessageDialog(null, String.format("Usuário %s cadastrado com sucesso!", usuario), tituloJanela, JOptionPane.INFORMATION_MESSAGE);
 
                         } catch(UsuarioExisteException e){
+
                             JOptionPane.showMessageDialog(null,"O usuário já existe em nosso sistema");
                 
                         } catch(MenorDeIdadeException e){
+
                             JOptionPane.showMessageDialog(null,"O usuário é menor de idade!");
                            
                         } catch(CartaoInvalidoException e){
+
                             JOptionPane.showMessageDialog(null,"O cartão digitado é invalido");
                            
                         } catch(CpfExistenteException e){
+
                             JOptionPane.showMessageDialog(null,"O CPF já existe em nosso sistema");
                           
                         } catch(CpfInvalidoException e){
+                            
                             JOptionPane.showMessageDialog(null,"O CPF digitado é invalido!");
                            
-                        } catch(NumberFormatException e){
-                            JOptionPane.showMessageDialog(null, "Digite uma idade válida");
-                            
-                        }
-
+                        } 
                         
-                    }while (continuar);
+                    } while(loopCadastro);
                         
-                    
-                    
                     break;
 
                 case 2:
