@@ -7,36 +7,74 @@ import javax.swing.JTextField;
 
 public class Main {
 
-    public static String customInput(String tituloJanela, String textoInput, String[] opcoes, int tamanhoInput, int icone){
+    public static String inputComRetornoValido(String tituloJanela, String textoInput, String[] opcoes, int tamanhoInput, int icone, String msgErro, boolean aceitarNulo){
 
-        JPanel painel = new JPanel();
-        painel.add(new JLabel(textoInput));
-        JTextField campoTexto = new JTextField(tamanhoInput);
-        painel.add(campoTexto);
+        boolean loopInput = true;
 
-        int qtdOpcoesRecebidas = opcoes.length;
-        int tipoBotoes = 0;
+        String inputValue;
 
-        switch(qtdOpcoesRecebidas){
+        do {
 
-            case 1:
-                
-                tipoBotoes = JOptionPane.YES_OPTION;
-                break;
+            JPanel painel = new JPanel();
+            painel.add(new JLabel(textoInput));
+            JTextField campoTexto = new JTextField(tamanhoInput);
+            painel.add(campoTexto);
 
-            case 2:
+            int qtdOpcoesRecebidas = opcoes.length;
+            int tipoBotoes = 0;
 
-                tipoBotoes = JOptionPane.YES_NO_OPTION;
-                break;
+            switch(qtdOpcoesRecebidas){
 
-            default:
+                case 1:
+                    
+                    tipoBotoes = JOptionPane.YES_OPTION;
+                    break;
 
-                tipoBotoes = JOptionPane.YES_NO_OPTION;
-                break;
+                case 2:
 
-        }
-        int opJanela = JOptionPane.showOptionDialog(null, painel, tituloJanela, tipoBotoes, icone, null, opcoes, opcoes[0]);
-        return opJanela == JOptionPane.YES_OPTION ? campoTexto.getText():null;
+                    tipoBotoes = JOptionPane.YES_NO_OPTION;
+                    break;
+
+                default:
+
+                    tipoBotoes = JOptionPane.YES_NO_OPTION;
+                    break;
+
+            }
+            int opJanela = JOptionPane.showOptionDialog(null, painel, tituloJanela, tipoBotoes, icone, null, opcoes, opcoes[0]);
+            // return opJanela == JOptionPane.YES_OPTION ? campoTexto.getText():null;
+            // inputValue = customInput(tituloJanela, textoInput, opcoes, tamanhoInput, icone);
+            inputValue = opJanela == JOptionPane.YES_OPTION ? campoTexto.getText():null;
+
+            if(aceitarNulo){
+
+                if(inputValue == null || inputValue.length() > 0){
+
+                    loopInput = false;
+
+                } else {
+
+                    JOptionPane.showMessageDialog(null, msgErro, tituloJanela, JOptionPane.ERROR_MESSAGE);
+
+                }
+
+            } else {
+
+                if(inputValue == null || inputValue.length() == 0){
+
+                    JOptionPane.showMessageDialog(null, msgErro, tituloJanela, JOptionPane.ERROR_MESSAGE);
+    
+                } else {
+                    
+                    loopInput = false;
+    
+                } 
+
+            }
+
+        } while(loopInput);
+
+        return inputValue;
 
     }
 
@@ -57,7 +95,7 @@ public class Main {
         SistemaStreamingAtual sistema = new SistemaStreamingAtual("./bd.txt");
         int opcao = 9;
 
-        while (opcao > 0) {
+        while(opcao > 0){
 
             try {
 
@@ -66,11 +104,17 @@ public class Main {
             } catch(NumberFormatException e){
 
                 opcao = 9;
-                System.out.println(e.getMessage());
+
+                // Se o usuario clicar no botão "Cancelar" o programa é encerrado
+                if(e.getMessage().equals("Cannot parse null string")){
+
+                    break;
+
+                }
 
             }
 
-            switch (opcao) {
+            switch(opcao){
 
                 case 1:
 
@@ -79,10 +123,11 @@ public class Main {
                     do {
 
                         // Coleta dos dados
-                        String tituloJanela = "Cadastro do novo usuário";
+                        String tituloJanela = "Adicionar usuário";
+
                         String[] botoesCampoUsuario = {"Avançar", "Cancelar"};
-                        String usuario = customInput(tituloJanela, "Digite o usuário:", botoesCampoUsuario, 10, JOptionPane.QUESTION_MESSAGE);
-                        
+                        String usuario = inputComRetornoValido(tituloJanela, "Digite o usuário:", botoesCampoUsuario, 10, JOptionPane.QUESTION_MESSAGE, "O nome de usuário não pode ficar vazio", true);
+
                         // Caso o usuário clique na opção "Cancelar", o programa volta pro menu principal
                         if(usuario == null){ 
 
@@ -92,7 +137,7 @@ public class Main {
 
                         String[] botoesOutrosCampos = {"Avançar"};
 
-                        String senha = customInput(tituloJanela, "Digite a senha:", botoesOutrosCampos, 10, JOptionPane.QUESTION_MESSAGE);
+                        String senha =  inputComRetornoValido(tituloJanela, "Digite a senha:", botoesOutrosCampos, 10, JOptionPane.QUESTION_MESSAGE, "A senha não pode ficar vazia", false);
 
                         // Não sai do loop enquanto "idade" não for inteiro
                         int idade = 0;
@@ -101,18 +146,19 @@ public class Main {
 
                             try {
 
-                                idade = Integer.parseInt(customInput(tituloJanela, "Digite a idade:", botoesOutrosCampos, 10, JOptionPane.QUESTION_MESSAGE));
+                                idade = Integer.parseInt(inputComRetornoValido(tituloJanela, "Digite a idade:", botoesOutrosCampos, 10, JOptionPane.QUESTION_MESSAGE, "A idade não pode ficar vazia", false));
 
                             } catch(NumberFormatException e){
 
-                                JOptionPane.showMessageDialog(null, "Digite uma idade válida", tituloJanela, JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "A idade deve ser um número", tituloJanela, JOptionPane.ERROR_MESSAGE);
                             
                             }
 
                         } while(idade <= 0);
 
-                        String cpf = customInput(tituloJanela, "Digite um CPF válido:", botoesOutrosCampos, 14, JOptionPane.QUESTION_MESSAGE).replaceAll("[^0-9]", "");
-                        String cartao = customInput(tituloJanela, "Digite um cartão válido", botoesOutrosCampos, 19, JOptionPane.QUESTION_MESSAGE).replaceAll("[^0-9]", "");
+                        String cpf = inputComRetornoValido(tituloJanela, "Digite um CPF válido:", botoesOutrosCampos, 14, JOptionPane.QUESTION_MESSAGE, "O CPF não pode ficar vazio", false).replaceAll("[^0-9]", "");
+
+                        String cartao = inputComRetornoValido(tituloJanela, "Digite um cartão válido", botoesOutrosCampos, 19, JOptionPane.QUESTION_MESSAGE, "O número do cartão não pode ficar vazio", false).replaceAll("[^0-9]", "");
 
                         String plano = sistema.PLANOS[JOptionPane.showOptionDialog(null, "Qual o plano escolhido?", tituloJanela, 0, 3, null, sistema.PLANOS, sistema.PLANOS[0])];
 
@@ -125,23 +171,23 @@ public class Main {
 
                         } catch(UsuarioExisteException e){
 
-                            JOptionPane.showMessageDialog(null,"O usuário já existe em nosso sistema");
+                            JOptionPane.showMessageDialog(null, "O usuário já existe em nosso sistema", tituloJanela, JOptionPane.ERROR_MESSAGE);
                 
                         } catch(MenorDeIdadeException e){
 
-                            JOptionPane.showMessageDialog(null,"O usuário é menor de idade!");
+                            JOptionPane.showMessageDialog(null, "O usuário é menor de idade!", tituloJanela, JOptionPane.ERROR_MESSAGE);
                            
                         } catch(CartaoInvalidoException e){
 
-                            JOptionPane.showMessageDialog(null,"O cartão digitado é invalido");
+                            JOptionPane.showMessageDialog(null, "O cartão digitado é invalido", tituloJanela, JOptionPane.ERROR_MESSAGE);
                            
                         } catch(CpfExistenteException e){
 
-                            JOptionPane.showMessageDialog(null,"O CPF já existe em nosso sistema");
+                            JOptionPane.showMessageDialog(null, "O CPF já existe em nosso sistema", tituloJanela, JOptionPane.ERROR_MESSAGE);
                           
                         } catch(CpfInvalidoException e){
                             
-                            JOptionPane.showMessageDialog(null,"O CPF digitado é invalido!");
+                            JOptionPane.showMessageDialog(null, "O CPF digitado é invalido!", tituloJanela, JOptionPane.ERROR_MESSAGE);
                            
                         } 
                         
@@ -150,75 +196,168 @@ public class Main {
                     break;
 
                 case 2:
+
                     boolean cont = true;
-                   do{
-                        try{
-                            String user = JOptionPane.showInputDialog("Digite o usuário a ser removido:");
+                    
+                    do {
+                        
+                        String[] opcoesInputUsuario = {"Remover", "Voltar"};
+                        String tituloJanela = "Remover Usuário";
+
+                        String user = inputComRetornoValido(tituloJanela, "Digite o usuário a ser removido:", opcoesInputUsuario, 10, JOptionPane.QUESTION_MESSAGE, "O nome de usuário não pode ficar vazio", true);
+                        
+                        if(user == null){
+
+                            break;
+
+                        }
+                        
+
+                        try {
+
                             sistema.removerUsuario(user);
                             cont = false;
-                            JOptionPane.showMessageDialog(null, "Usuário removido com sucesso");;
+                            JOptionPane.showMessageDialog(null, "Usuário removido com sucesso", tituloJanela, JOptionPane.INFORMATION_MESSAGE);
+
                         } catch(UsuarioInexistenteException e){
-                            JOptionPane.showMessageDialog(null,"O usuário não existe no sistema!");
+
+                            JOptionPane.showMessageDialog(null, "O usuário não existe no sistema!", tituloJanela, JOptionPane.ERROR_MESSAGE);
                            
                         }
-                    } while (cont); 
-                        
-                
-                    
+
+                    } while(cont);
+
                     break;
 
                 case 3:
+
                     boolean conti = true;
-                    do{
-                        try{
-                            String usuario = JOptionPane.showInputDialog("Digite o usuário para mudar a senha:");
-                            String senhaAntiga = JOptionPane.showInputDialog("Digite a senha antiga:");
-                            String senhaNova = JOptionPane.showInputDialog("Digite a senha:");
-                            sistema.alterarSenhaDoUsuario(usuario, senhaAntiga, senhaNova);
-                            conti = false;
-                            JOptionPane.showMessageDialog(null, "Senha alterada com sucesso");
-                        } catch(SenhaIncorretaException e){
-                            JOptionPane.showMessageDialog(null, "A senha antiga está incorreta");
-                        } catch(UsuarioInexistenteException e){
-                            JOptionPane.showMessageDialog(null, "O usuário não existe");
+                    
+                    do {
+
+                        String[] opcoesInputUsuarioMudaSenha = {"Avançar", "Voltar"};
+                        String[] opcoesInputMudaSenha = {"Avançar"};
+                        String tituloJanelaMudaSenha = "Alterar senha do usuário";
+
+                        String usuario = inputComRetornoValido(tituloJanelaMudaSenha, "Digite o usuário para mudar a senha:", opcoesInputUsuarioMudaSenha, 10, JOptionPane.QUESTION_MESSAGE, "Um usuário deve ser informado", true);
+
+                        if(usuario == null){
+
+                            break;
+
                         }
 
-                    } while (conti) ;
+                        String senhaAntiga = inputComRetornoValido(tituloJanelaMudaSenha, "Digite a senha antiga:", opcoesInputMudaSenha, 10, JOptionPane.PLAIN_MESSAGE, "A senha antiga não pode estar vazia", false);
+                        String senhaNova = inputComRetornoValido(tituloJanelaMudaSenha, "Digite a nova senha:", opcoesInputMudaSenha, 10, JOptionPane.PLAIN_MESSAGE, "A senha nova não pode estar vazia", false);
+
+
+                        try {
+                            
+                            sistema.alterarSenhaDoUsuario(usuario, senhaAntiga, senhaNova);
+                            conti = false;
+                            JOptionPane.showMessageDialog(null, "Senha alterada com sucesso", tituloJanelaMudaSenha, JOptionPane.INFORMATION_MESSAGE);
+                            
+                        } catch(SenhaIncorretaException e){
+
+                            JOptionPane.showMessageDialog(null, "A senha antiga está incorreta", tituloJanelaMudaSenha, JOptionPane.ERROR_MESSAGE);
+                            
+                        } catch(UsuarioInexistenteException e){
+
+                            JOptionPane.showMessageDialog(null, "O usuário não existe", tituloJanelaMudaSenha, JOptionPane.ERROR_MESSAGE);
+                            
+                        }
+
+                    } while(conti) ;
                         
                     break;
 
                 case 4:
-                boolean continuando = true;
-                    do{
+                    
+                    boolean continuando = true;
+
+                    do {
+                       
+                        String tituloJanelaMudaPlano = "Alterar plano do usuário";
+                        String[] opcoesInputUsuarioMudaPlano = {"Avançar", "Voltar"};
+                        String usuario = inputComRetornoValido(tituloJanelaMudaPlano, "Digite o usuário a ser alterado o plano:", opcoesInputUsuarioMudaPlano, 10, JOptionPane.QUESTION_MESSAGE, "O nome de usuário não pode ficar vazio", true);
+
+                        if(usuario == null){
+
+                            break;
+
+                        }
+                        
                         try{
-                            String usuario = JOptionPane.showInputDialog("Digite o usuário a ser alterado o plano:");
-                            String planoNovo = JOptionPane.showInputDialog("Digite o plano escolhido: ---> (Básico com anúncios, básico e premium)");
+                            
+                            UsuarioStreaming usuarioAtual = sistema.buscarUsuarioPorNome(usuario);
+
+                            String[] planosDisponiveis = new String[sistema.PLANOS.length-1];
+
+                            // Retira o plano atual do usuário da lista de planos a ser oferecida
+                            int i = 0;
+                            for(String p: sistema.PLANOS){
+
+                                if(!p.equals(usuarioAtual.getPlano())){
+
+                                    planosDisponiveis[i] = p;
+                                    i++;
+
+                                }
+
+                            }
+                            
+                            String planoNovo = planosDisponiveis[JOptionPane.showOptionDialog(null, "Qual o plano escolhido?", tituloJanelaMudaPlano, 0, 3, null, planosDisponiveis, planosDisponiveis[0])];
                             sistema.alterarPlano(usuario, planoNovo);
                             continuando = false;
-                            JOptionPane.showMessageDialog(null, "Plano alterado com sucesso!");
+                            JOptionPane.showMessageDialog(null, "Plano alterado com sucesso!", tituloJanelaMudaPlano, JOptionPane.INFORMATION_MESSAGE);
 
                         } catch(UsuarioInexistenteException e){
-                            JOptionPane.showMessageDialog(null, " O usuário não existe");
+
+                            JOptionPane.showMessageDialog(null, "O usuário não existe", tituloJanelaMudaPlano, JOptionPane.ERROR_MESSAGE);
+                            
                         }
-                    }while(continuando);
+
+                    } while(continuando);
                     
                     break;
 
                 case 5:
-                boolean go = true;
-                do{
-                    try{
-                        String usuario = JOptionPane.showInputDialog("Digite o usuário para alterar o cartão:");
-                        String cartaoNovo = JOptionPane.showInputDialog("Digite o novo cartão").replaceAll("[^0-9]", "");
-                        sistema.alterarCartao(usuario, cartaoNovo);
-                        go = false;
-                        JOptionPane.showMessageDialog(null, "Cartão alterado com sucesso!");
-                    } catch(UsuarioInexistenteException e){
-                        JOptionPane.showMessageDialog(null, "O usuário não existe");
-                    } catch(CartaoInvalidoException e){
-                        JOptionPane.showMessageDialog(null, "O cartão digitado é invalido!");
-                    }
-                }while(go);
+
+                    boolean go = true;
+
+                    do {
+
+                        String tituloJanelaMudaCartao = "Alterar cartão de crédito do usuário";
+                        String[] opcoesInputUsuarioMudaCartao = {"Avançar", "Voltar"};
+                        String[] opcoesInputMudaCartao = {"Avançar"};
+
+                        String usuario = inputComRetornoValido(tituloJanelaMudaCartao, "Digite o usuário para alterar o cartão:", opcoesInputUsuarioMudaCartao, 10, JOptionPane.QUESTION_MESSAGE, "É preciso informar um nome de usuário cadastrado", true);
+                        
+                        if(usuario == null){
+
+                            break;
+
+                        }
+
+                        String cartaoNovo = inputComRetornoValido(tituloJanelaMudaCartao, "Digite o novo cartão", opcoesInputMudaCartao, 19, JOptionPane.QUESTION_MESSAGE, "É preciso informar um cartão de crédito", false).replaceAll("[^0-9]", "");
+
+                        try {
+                            
+                            sistema.alterarCartao(usuario, cartaoNovo);
+                            go = false;
+                            JOptionPane.showMessageDialog(null, "Cartão alterado com sucesso!", tituloJanelaMudaCartao, JOptionPane.INFORMATION_MESSAGE);
+                            
+                        } catch(UsuarioInexistenteException e){
+                            
+                            JOptionPane.showMessageDialog(null, "O usuário não existe", tituloJanelaMudaCartao, JOptionPane.ERROR_MESSAGE);
+
+                        } catch(CartaoInvalidoException e){
+
+                            JOptionPane.showMessageDialog(null, "O cartão digitado é invalido!", tituloJanelaMudaCartao, JOptionPane.ERROR_MESSAGE);
+                            
+                        }
+
+                    } while(go);
                     
                     break;
 
