@@ -4,6 +4,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import java.awt.GridLayout;
 
 public class Main {
 
@@ -16,6 +17,9 @@ public class Main {
         do {
 
             JPanel painel = new JPanel();
+
+            painel.setLayout(new GridLayout(2,2));
+
             painel.add(new JLabel(textoInput));
             JTextField campoTexto = new JTextField(tamanhoInput);
             painel.add(campoTexto);
@@ -41,9 +45,8 @@ public class Main {
                     break;
 
             }
+
             int opJanela = JOptionPane.showOptionDialog(null, painel, tituloJanela, tipoBotoes, icone, null, opcoes, opcoes[0]);
-            // return opJanela == JOptionPane.YES_OPTION ? campoTexto.getText():null;
-            // inputValue = customInput(tituloJanela, textoInput, opcoes, tamanhoInput, icone);
             inputValue = opJanela == JOptionPane.YES_OPTION ? campoTexto.getText():null;
 
             if(aceitarNulo){
@@ -99,20 +102,16 @@ public class Main {
 
             try {
 
-                opcao = Integer.parseInt(JOptionPane.showInputDialog(null, "Menu principal\n1 - Adicionar usuario\n2 - Remover usuário\n3 - Alterar senha do usuário\n4 - Alterar plano do usuário\n5 - Alterar cartão de crédito do usuário\n6 - Buscar usuário por nome\n7 - Buscar usuário por CPF\n0 - Sair\n\nDigite uma das opções acima", "Sistema de Gerenciamento de Contas de Streaming", JOptionPane.QUESTION_MESSAGE));
-            
+                opcao = Integer.parseInt(JOptionPane.showInputDialog(null, "Menu principal\n1 - Adicionar usuario\n2 - Remover usuário\n3 - Alterar senha do usuário\n4 - Alterar plano do usuário\n5 - Alterar cartão de crédito do usuário\n6 - Buscar usuário por nome\n7 - Buscar usuário por CPF\n0 - Sair\n\nDigite uma das opções acima", "Sistema de Gerenciamento de Contas de Streaming", JOptionPane.PLAIN_MESSAGE));
+                
             } catch(NumberFormatException e){
 
-                opcao = 9;
-
                 // Se o usuario clicar no botão "Cancelar" o programa é encerrado
-                if(e.getMessage().equals("Cannot parse null string")){
-
-                    break;
-
-                }
+                opcao = e.getMessage().equals("Cannot parse null string") ? 0:9;
 
             }
+
+            String[] botoesBuscaUsuario = {"Buscar", "Voltar"};
 
             switch(opcao){
 
@@ -212,7 +211,6 @@ public class Main {
 
                         }
                         
-
                         try {
 
                             sistema.removerUsuario(user);
@@ -249,7 +247,6 @@ public class Main {
 
                         String senhaAntiga = inputComRetornoValido(tituloJanelaMudaSenha, "Digite a senha antiga:", opcoesInputMudaSenha, 10, JOptionPane.PLAIN_MESSAGE, "A senha antiga não pode estar vazia", false);
                         String senhaNova = inputComRetornoValido(tituloJanelaMudaSenha, "Digite a nova senha:", opcoesInputMudaSenha, 10, JOptionPane.PLAIN_MESSAGE, "A senha nova não pode estar vazia", false);
-
 
                         try {
                             
@@ -362,40 +359,74 @@ public class Main {
                     break;
 
                 case 6:
-                boolean going = true;
-                do{
-                    try{
-                        String nome = JOptionPane.showInputDialog("Digite o nome do usuário:");
-                        UsuarioStreaming usuario= sistema.buscarUsuarioPorNome(nome);
-                       JOptionPane.showMessageDialog(null, usuario.toString());
-                        going = false;
-                    } catch(UsuarioInexistenteException e){
-                        JOptionPane.showMessageDialog(null, "O usuário não existe)");
-                    }
-                }while (going); 
+
+                    boolean going = true;
+                    String tituloJanelaBuscaNome = "Buscar usuário por nome";
+
+                    do {
+
+                        String nome = inputComRetornoValido(tituloJanelaBuscaNome, "Digite o nome do usuário:", botoesBuscaUsuario, 10, JOptionPane.QUESTION_MESSAGE, "Não foi informado um nome de usuário", true);
+
+                        if(nome == null){
+
+                            break;
+                            
+                        }
+
+                        try {    
+
+                            UsuarioStreaming usuario = sistema.buscarUsuarioPorNome(nome);
+                            JOptionPane.showMessageDialog(null, usuario.toString(), tituloJanelaBuscaNome, JOptionPane.PLAIN_MESSAGE);
+                            going = false;
+
+                        } catch(UsuarioInexistenteException e){
+
+                            JOptionPane.showMessageDialog(null, "O usuário não existe", tituloJanelaBuscaNome, JOptionPane.ERROR_MESSAGE);
+
+                        }
+
+                    } while(going); 
                     
                     break;
 
                 case 7:
-                boolean goes = true;
-                do{
-                    try{
-                    String cpf = JOptionPane.showInputDialog("Digite o CPF a ser pesquisado").replaceAll("[^0-9]", "");
-                      UsuarioStreaming usuario = sistema.buscarUsuarioPorCpf(cpf);
-                      JOptionPane.showMessageDialog(null, usuario.toString());
-                      goes = false;
-                    }catch(UsuarioInexistenteException e){
-                        JOptionPane.showMessageDialog(null, "O usuário não existe");
-                    }catch(CpfInvalidoException e){
-                        JOptionPane.showMessageDialog(null, "O CPF digitado é invalido!");
-                    }
-                }while(goes);
+
+                    boolean goes = true;
+                    String tituloJanelaBuscaCpf = "Buscar usuário por CPF";
+
+                    do {
+
+                        String cpf = inputComRetornoValido(tituloJanelaBuscaCpf, "Digite o CPF a ser pesquisado", botoesBuscaUsuario, 10, JOptionPane.QUESTION_MESSAGE, "Não foi informado um CPF", true).replaceAll("[^0-9]", "");
+                        
+                        if(cpf == null){
+
+                            break;
+
+                        }
+
+                        try {
+
+                            UsuarioStreaming usuario = sistema.buscarUsuarioPorCpf(cpf);
+                            JOptionPane.showMessageDialog(null, usuario.toString(), tituloJanelaBuscaCpf, JOptionPane.PLAIN_MESSAGE);
+                            goes = false;
+
+                        }catch(UsuarioInexistenteException e){
+
+                            JOptionPane.showMessageDialog(null, "O usuário não existe", tituloJanelaBuscaCpf, JOptionPane.ERROR_MESSAGE);
+
+                        }catch(CpfInvalidoException e){
+
+                            JOptionPane.showMessageDialog(null, "O CPF digitado é invalido!", tituloJanelaBuscaCpf, JOptionPane.ERROR_MESSAGE);
+
+                        }
+
+                    } while(goes);
                     
                     break;
 
                 case 0:
 
-
+                    JOptionPane.showMessageDialog(null, "Obrigado por usar nosso sistema!", "Até logo", JOptionPane.PLAIN_MESSAGE);
                     break;
                 
                 default:
